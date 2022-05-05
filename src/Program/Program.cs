@@ -26,9 +26,20 @@ namespace Full_GRASP_And_SOLID
             recipe.AddStep(new Step(GetProduct("Café"), 100, GetEquipment("Cafetera"), 120));
             recipe.AddStep(new Step(GetProduct("Leche"), 200, GetEquipment("Hervidor"), 60));
 
-            AllInOnePrinter printer = new AllInOnePrinter();
-            printer.PrintRecipe(recipe, Destination.Console);
-            printer.PrintRecipe(recipe, Destination.File);
+            /*
+            Uso SRP para separar la implementación del AllInOnePrinter en dos variantes
+            separadas. ConsolePrinter, realiza la impresión en consola, y FilePrinter realiza
+            la impresión en el archivo.
+
+            Al mismo tiempo uso una interfaz en común, llamada IPrinter, que luego es implementada
+            tanto por ConsolePrinter como por FilePrinter, esto permite utilizar un "Printer" sin 
+            saber, necesariamente, cuál es el destino de la impresión (polimorfismo).
+            */
+            IPrinter p0 = new ConsolePrinter();
+            p0.PrintRecipe(recipe);
+
+            IPrinter p1 = new FilePrinter("Recipe.txt");
+            p1.PrintRecipe(recipe);
         }
 
         private static void PopulateCatalogs()
